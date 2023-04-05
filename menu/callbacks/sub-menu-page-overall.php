@@ -1,8 +1,6 @@
 <?php
 function linkages_overall_report_callback(){
 
-    // echo '<div id="preloader"><div class="loader"></div></div>';
-
     $domain = get_site_url();
     // $domain = 'https://anikyusuf.com';
 
@@ -70,9 +68,7 @@ function linkages_overall_report_callback(){
     
 ?>
 
-
 <div class="linkages-container">
-
 
 <div class="wrap">
     <h1>Site Report</h1>
@@ -196,9 +192,7 @@ function linkages_overall_report_callback(){
 
         </div>    
     </div><!-- ./wrap -->
-
-    
-        
+     
     <div class="wrap" id="quick">
 
         <h2 class="tc">Quick Glance</h2>

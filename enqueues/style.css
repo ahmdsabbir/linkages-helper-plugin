@@ -214,3 +214,8 @@ ul#orphanList {
 .tc {
     font-style: normal;
 }
+
+.loader {
+    min-width: 100vw;
+    min-height: 100vh;
+}
