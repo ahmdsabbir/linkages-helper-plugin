@@ -1,0 +1,206 @@
+.linkages-container {
+    margin: 0;
+}
+
+.linkages-container .wrap {
+    margin-bottom: 2rem;
+}
+
+.linkages-container h1 {
+    font-weight: 800;
+    font-size: 1.25rem;
+    margin-bottom: 1.2rem;
+}
+
+.linkages-container .wrap h2 {
+    font-weight: 500;
+}
+
+.chart-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.chart-cards-big {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+    /* grid-template-areas: ' . . f h . .'; */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.chart-cards-big .f {
+    grid-column: 2 / span 1;
+}
+
+.chart-cards-big .h {
+    grid-column: 3 / span 1;
+}
+
+.chart-cards .card {
+    box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    border: none;
+}
+
+.chart-card {
+    background-color: #fff;
+    box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    border: none;
+}
+.chart-card .head {
+    padding: 1rem;
+    border-bottom: 1px solid rgb(234, 237, 241);
+}
+.chart-card .head h3{
+    margin: 0;
+    font-weight: 500;
+    font-size: 16px;
+}
+.chart-card .body {
+    padding: 1rem;
+}
+
+.simple-box {
+    box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    background-color: #fff;
+    padding: .5rem 1rem;
+    width: auto;
+    margin-bottom: 1rem;
+}
+
+.links {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #1b221d;
+    text-decoration: dotted;
+    padding: .5rem;
+    border-radius: 4px;
+}
+
+.small-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+}
+.small-card {
+    background-color: #fff;
+    padding: 1.5rem;
+    box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+.small-card .body {
+    min-height: 100px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+
+.small-card .body .left{
+    margin-left: .5rem;
+}
+
+.small-card .body .left p {
+    font-weight: 500;
+}
+
+.small-card .body .left p.b {
+    color:#4c5a68;
+}
+
+.small-card .body .left h3 {
+    font-size: 2.5rem;
+    margin: 5px 0;
+    font-weight: 700;
+}
+.small-card .body .right span {
+    font-size: 48px;
+}
+
+/* COLORS */
+.color1 .body .left h3, .color1 .body .right span {
+    color: #E384FF;
+}
+.color2 .body .left h3, .color2 .body .right span {
+    color: #6ECCAF;
+}
+.color3 .body .left h3, .color3 .body .right span {
+    color: #059bff;
+}
+.color4 .body .left h3, .color4 .body .right span {
+    color: #ff4069;
+}
+.color5 .body .left h3, .color5 .body .right span {
+    color: #ff9640;
+}
+
+#outbound-domains .chart-card .body {
+    padding-left: 10rem;
+    padding-right: 10rem;
+}
+
+/* table */
+
+.linkages-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .linkages-table thead {
+    background-color: #f2f2f2;
+  }
+  
+  .linkages-table th, .linkages-table td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .linkages-table tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .linkages-table th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  @media screen and (max-width: 768px) {
+    /* Hide table headers */
+    .linkages-table thead {
+      display: none;
+    }
+    
+    /* Make table cells block level */
+    .linkages-table td,
+    .linkages-table th {
+      display: block;
+      text-align: center;
+    }
+    
+    /* Add border to table cells */
+    .linkages-table td {
+      border: none;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    /* Add padding to table cells */
+    .linkages-table td:before {
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      margin-right: 0.5em;
+    }
+  }
+
+ul#orphanList {
+    list-style-type: decimal;
+}
+
+.small-card .body .left p.b {
+    color: #A4BC92;
+}
