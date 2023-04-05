@@ -416,16 +416,18 @@ function linkages_overall_report_callback(){
                     'Faulty External Links' + '(' + <?php echo $num_outbound_404; ?> + ')',
 
                 ],
-        datasets: [{
-            label: 'Number of links, out of ' + <?php echo $num_total_link; ?>,
-            data: [
-                    <?php echo $num_internal_link - $num_internal_404; ?>,
-                    <?php echo $num_internal_404; ?>,
-                    <?php echo $num_outbound_link - $num_outbound_404; ?>,
-                    <?php echo $num_outbound_404; ?>
-                ],
-            borderWidth: 1
-        }]
+        datasets: [
+                    {
+                        label: 'Number of links, out of ' + <?php echo $num_total_link; ?>,
+                        data: [
+                                <?php echo $num_internal_link - $num_internal_404; ?>,
+                                <?php echo $num_internal_404; ?>,
+                                <?php echo $num_outbound_link - $num_outbound_404; ?>,
+                                <?php echo $num_outbound_404; ?>
+                            ],
+                        borderWidth: 1
+                    }
+            ]
         },
         });
         

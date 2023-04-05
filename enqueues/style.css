@@ -1,3 +1,6 @@
+:root {
+    --border-radius: 10px;
+}
 .linkages-container {
     margin: 0;
 }
@@ -38,14 +41,14 @@
 
 .chart-cards .card {
     box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     border: none;
 }
 
 .chart-card {
     background-color: #fff;
     box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     border: none;
 }
 .chart-card .head {
@@ -63,7 +66,7 @@
 
 .simple-box {
     box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     background-color: #fff;
     padding: .5rem 1rem;
     width: auto;
@@ -89,7 +92,7 @@
     background-color: #fff;
     padding: 1.5rem;
     box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     justify-self: stretch;
 }
 .small-card .body {
@@ -150,7 +153,7 @@
     border-collapse: collapse;
     width: 100%;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
   }
   
   .linkages-table thead {
