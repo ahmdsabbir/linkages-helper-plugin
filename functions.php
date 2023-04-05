@@ -38,7 +38,6 @@ function get_response($endpoint, $domain, $api_key) {
 
 }
 
-
 function linkages_plugin_enqueue_scripts() {
     wp_enqueue_style( 'linkages-plugin-style', plugins_url( '/enqueues/style.css', __FILE__ ) );
     wp_enqueue_script( 'linkages-chart-script', plugins_url( '/enqueues/chart.js', __FILE__ ), array(), '1.0.0', true );

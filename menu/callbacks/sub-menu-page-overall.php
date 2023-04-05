@@ -61,17 +61,13 @@ function linkages_overall_report_callback(){
 
     if ($status == 'success'):
         // 404 source requests
-        $resp = get_response('http://127.0.0.1:5000/wp/plugin/internal-404', $domain, $api_key);
+        $resp = get_response('http://127.0.0.1:5000/wp/plugin/ie-404', $domain, $api_key);
         $data = json_decode($resp);
-        $source_internal_404 = $data->links;
+        $source_internal_404 = $data->internal_links;
+        $source_external_404 = $data->external_links;
+        $num_pillars = $data->num_pillars;
     endif;
     
-    if ($status == 'success'):
-        // 404 source requests
-        $resp = get_response('http://127.0.0.1:5000/wp/plugin/external-404', $domain, $api_key);
-        $data = json_decode($resp);
-        $source_external_404 = $data->links;
-    endif;
 ?>
 
 
@@ -120,8 +116,8 @@ function linkages_overall_report_callback(){
                 <div class="body">
                     <div class="left">
                         <h3><?php echo $num_all_posts ?></h3>
-                        <p class="a">Total Posts</p>
-                        <p class="b">Latest post on <?php latest_post_date(); ?></p>
+                        <p class="a">Total posts</p>
+                        <p class="b">Last post on <?php latest_post_date(); ?></p>
                     </div>
                     <div class="right">
                         <span class="dashicons dashicons-admin-post"></span>
@@ -180,23 +176,35 @@ function linkages_overall_report_callback(){
                         <p class="b">Mo' relevant domains... mo' money!</p>
                     </div>
                     <div class="right">
-                        <span class="dashicons dashicons-external"></span>
+                        <span class="dashicons dashicons-admin-site-alt2"></span>
                     </div>
                 </div>
             </div>
             
-            
+            <div class="small-card color6">
+                <div class="body">
+                    <div class="left">
+                        <h3><?php echo $num_pillars ?></h3>
+                        <p class="a">Pillar posts</p>
+                        <p class="b">Pillar posts get all the links</p>
+                    </div>
+                    <div class="right">
+                        <span class="dashicons dashicons-editor-contract"></span>
+                    </div>
+                </div>
+            </div>
 
         </div>    
     </div><!-- ./wrap -->
+
+    
         
     <div class="wrap" id="quick">
 
-        <h2>Quick Glance</h2>
+        <h2 class="tc">Quick Glance</h2>
 
-        <div class="chart-cards">
-
-            <div class="chart-card">
+        <div class="chart-cards-big">
+            <div class="chart-card lr">
                 <div class="head">
                     <h3>Post Report</h3>
                 </div>
@@ -206,6 +214,9 @@ function linkages_overall_report_callback(){
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="chart-cards">
 
             <div class="chart-card">
                 <div class="head">
@@ -257,8 +268,8 @@ function linkages_overall_report_callback(){
     </div><!-- ./wrap -->
 
     <div class="wrap" id="link">
-        <h2>404 Links</h2>
-        <p>
+        <h2 class="tc">404 Links</h2>
+        <p class="tc">
             We found <?php echo $num_internal_404 + $num_outbound_404; ?> links that returns 404 status code. <?php if ($num_internal_404 + $num_outbound_404 == 0) {echo 'Good Job!';} else {echo 'Fix it.';} ?>
         </p>
         
@@ -337,17 +348,17 @@ function linkages_overall_report_callback(){
     </div><!-- ./wrap -->
 
     <div class="wrap" id="orphan">
-        <h2>Orphan Post Report</h2>
+        <h2 class="tc">Orphan Post Report</h2>
         <div class="chart-card">
             <div class="head">
-                <h3>Orphan Posts</h3>
+                <h3>Orphan Posts (<?php echo $num_orphan; ?>)</h3>
             </div>
             <div class="body">
-
+                
+                <button id="hideBtn2" style="display:none;" class="button button-secondary">Hide</button>
                 <?php if ($num_orphan == 0): ?>
                     Excellent work! We found No Orphan Posts.
                 <?php else: ?>
-                    <p><strong>[<?php echo $num_orphan; ?> Orphan Post/s found]</strong></p>
                     <ul id="orphanList">
                         <?php foreach($orphan_links as $link): ?>
                             <li><a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></li>
@@ -364,9 +375,10 @@ function linkages_overall_report_callback(){
     </div><!-- ./wrap -->
 
     <div class="wrap" id="outbound-domains">
+        <h2 class="tc">External Domain report</h2>
         <div class="chart-card">
             <div class="head">
-                <h2>Outbound Domains</h2>
+                <h3>Outbound Domains</h3>
             </div>
             <div class="body">
                 <?php if ( $num_outbound_domains == 0 ) : ?>
@@ -395,17 +407,17 @@ function linkages_overall_report_callback(){
         const link_report = document.getElementById('linkReport');
 
         new Chart(link_report, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
         labels: [
                     'Correct Internal Links' + '(' + <?php echo $num_internal_link - $num_internal_404; ?> + ')',
                     'Faulty Internal Links' + '(' + <?php echo $num_internal_404; ?> + ')',
-                    'Correct Internal Links' + '(' + <?php echo $num_outbound_link - $num_outbound_404; ?> + ')',
-                    'Faulty Internal Links' + '(' + <?php echo $num_outbound_404; ?> + ')',
+                    'Correct External Links' + '(' + <?php echo $num_outbound_link - $num_outbound_404; ?> + ')',
+                    'Faulty External Links' + '(' + <?php echo $num_outbound_404; ?> + ')',
 
                 ],
         datasets: [{
-            label: 'out of ' + <?php echo $num_total_link; ?> + ' Links',
+            label: 'Number of links, out of ' + <?php echo $num_total_link; ?>,
             data: [
                     <?php echo $num_internal_link - $num_internal_404; ?>,
                     <?php echo $num_internal_404; ?>,
@@ -466,7 +478,7 @@ function linkages_overall_report_callback(){
         const orphanLinks = document.getElementById('orphanLinks');
 
         new Chart(orphanLinks, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
             labels: ['Posts with Interlinks' + '(' + <?php echo $num_all_posts - $num_orphan; ?> + ')', 'Number of Orphan Posts' + '(' + <?php echo $num_orphan; ?> + ')'],
             datasets: [{
