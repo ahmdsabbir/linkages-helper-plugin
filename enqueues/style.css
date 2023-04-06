@@ -246,3 +246,37 @@ ul#orphanList li a {
     min-width: 100vw;
     min-height: 100vh;
 }
+
+#orphan > .chart-cards > .chart-card {
+    max-height: 381px;
+    overflow-y: scroll;
+}
+
+.custom-scrollbar {
+    --scrollbar-color: #a7acb2;
+    --scrollbar-track-color: transparent;
+    --scrollbar-size: 8px;
+    --scrollbar-size-firefox: thin;
+    --scrollbar-color-hover: #777a7e;
+    --scrollbar-color-active: #777a7e;
+    scrollbar-color: var(--scrollbar-color) var(--scrollbar-track-color);
+    scrollbar-width: var(--scrollbar-size-firefox);
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    height: var(--scrollbar-size);
+    width: var(--scrollbar-size);
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track-color);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-color);
+    border-radius: 20px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-color-hover);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:active {
+    background-color: var(--scrollbar-color-active);
+  }
+  

@@ -381,7 +381,7 @@ function linkages_overall_report_callback(){
 
         <div class="chart-cards">
 
-            <div class="chart-card">
+            <div class="chart-card custom-scrollbar">
                 <div class="head">
                     <h3>Orphan Posts (<?php echo $num_orphan; ?>)</h3>
                 </div>
@@ -405,7 +405,7 @@ function linkages_overall_report_callback(){
                 </div>
             </div>
 
-            <div class="chart-card">
+            <div class="chart-card custom-scrollbar">
                 <div class="head">
                     <h3>Outbound Domains</h3>
                 </div>
