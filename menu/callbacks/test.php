@@ -7,7 +7,12 @@ function linkages_overall_report_callback(){
     $api_key = get_option('linkages_api_key');
     $resp = get_response('http://127.0.0.1:5000/wp/plugin/get-report', $domain, $api_key);
 
-    
+    // Add JavaScript code to hide the preloader when the page is fully loaded
+    // echo '<script>
+    //         window.addEventListener("load", function(){
+    //             document.getElementById("preloader").style.display = "none";
+    //         });
+    //     </script>';
 
     $data = json_decode($resp);
 
@@ -54,20 +59,17 @@ function linkages_overall_report_callback(){
 
     if ($status == 'success'):
         // 404 source requests
-        $resp = get_response('http://127.0.0.1:5000/wp/plugin/internal-404', $domain, $api_key);
+        $resp = get_response('http://127.0.0.1:5000/wp/plugin/other', $domain, $api_key);
         $data = json_decode($resp);
-        $source_internal_404 = $data->links;
+        $source_internal_404 = $data->internal_links;
+        $source_external_404 = $data->external_links;
+        $num_pillars = $data->num_pillars;
+        $silo = $data->silo;
     endif;
     
-    if ($status == 'success'):
-        // 404 source requests
-        $resp = get_response('http://127.0.0.1:5000/wp/plugin/external-404', $domain, $api_key);
-        $data = json_decode($resp);
-        $source_external_404 = $data->links;
-    endif;
 ?>
-<div class="linkages-container">
 
+<div class="linkages-container">
 
 <div class="wrap">
     <h1>Site Report</h1>
@@ -90,8 +92,6 @@ function linkages_overall_report_callback(){
 
 <?php elseif ($status == 'success') : ?>
 
-
-
     <div class="wrap">
     
         <div class="chart-card">
@@ -113,8 +113,8 @@ function linkages_overall_report_callback(){
                 <div class="body">
                     <div class="left">
                         <h3><?php echo $num_all_posts ?></h3>
-                        <p class="a">Total Posts</p>
-                        <p class="b">Latest post on <?php latest_post_date(); ?></p>
+                        <p class="a">Total posts</p>
+                        <p class="b">Last post on <?php latest_post_date(); ?></p>
                     </div>
                     <div class="right">
                         <span class="dashicons dashicons-admin-post"></span>
@@ -134,7 +134,7 @@ function linkages_overall_report_callback(){
                         <?php endif; ?>
                     </div>
                     <div class="right">
-                        <span class="dashicons dashicons-table-col-delete"></span>
+                        <span class="dashicons dashicons-dismiss"></span>
                     </div>
                 </div>
             </div>
@@ -165,20 +165,89 @@ function linkages_overall_report_callback(){
                 </div>
             </div>
             
+            <div class="small-card color5">
+                <div class="body">
+                    <div class="left">
+                        <h3><?php echo count($outbound_domains) ?></h3>
+                        <p class="a">Outbound domains</p>
+                        <p class="b">Mo' relevant domains... mo' money!</p>
+                    </div>
+                    <div class="right">
+                        <span class="dashicons dashicons-admin-site-alt2"></span>
+                    </div>
+                </div>
+            </div>
             
+            <div class="small-card color6">
+                <div class="body">
+                    <div class="left">
+                        <h3><?php echo $num_pillars ?></h3>
+                        <p class="a">Pillar posts</p>
+                        <p class="b">Pillar posts get all the links</p>
+                    </div>
+                    <div class="right">
+                        <span class="dashicons dashicons-editor-contract"></span>
+                    </div>
+                </div>
+            </div>
 
         </div>    
     </div><!-- ./wrap -->
-        
+     
     <div class="wrap" id="quick">
 
-        <h2>Quick Glance</h2>
+        <h2 class="tc">Quick Glance</h2>
+
+        <div class="chart-cards-big">
+
+            <div class="chart-card lr">
+                <div class="head">
+                    <h3>Post Report</h3>
+                </div>
+                <div>
+                    <div class="body">
+                        <canvas id="linkReport"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-card rr">
+                <div class="head">
+                    <h3>Pillar Information</h3>
+                </div>
+                <div>
+                    <div class="body">
+                        <table class="linkages-table">
+                            <thead>
+                                <tr>
+                                    <td>Pillar Posts</td>
+                                    <td>Support Posts</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($silo as $s) : ?>
+                                    <tr>
+                                        <td>
+                                            <a href="<?php echo $s->url ?>" target="_blank"><?php echo $s->title ?></a>
+                                        </td>
+                                        <td>
+                                            <?php echo $s->supports ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
         <div class="chart-cards">
 
             <div class="chart-card">
                 <div class="head">
-                    <h3>Overview of All Internal and External Links</h3>
+                    <h3>Internal and External Links</h3>
                 </div>
                 <div>
                     <div class="body">
@@ -189,7 +258,7 @@ function linkages_overall_report_callback(){
 
             <div class="chart-card">
                 <div class="head">
-                    <h3>Internal Links</h3>
+                    <h3>Internal Link Report</h3>
                 </div>
                 <div>
                     <div class="body">
@@ -200,7 +269,7 @@ function linkages_overall_report_callback(){
 
             <div class="chart-card">
                 <div class="head">
-                    <h3>External Links</h3>
+                    <h3>External Link Report</h3>
                 </div>
                 <div>
                     <div class="body">
@@ -226,8 +295,8 @@ function linkages_overall_report_callback(){
     </div><!-- ./wrap -->
 
     <div class="wrap" id="link">
-        <h2>404 Links</h2>
-        <p>
+        <h2 class="tc">404 Links</h2>
+        <p class="tc">
             We found <?php echo $num_internal_404 + $num_outbound_404; ?> links that returns 404 status code. <?php if ($num_internal_404 + $num_outbound_404 == 0) {echo 'Good Job!';} else {echo 'Fix it.';} ?>
         </p>
         
@@ -306,17 +375,17 @@ function linkages_overall_report_callback(){
     </div><!-- ./wrap -->
 
     <div class="wrap" id="orphan">
-        <h2>Orphan Post Report</h2>
+        <h2 class="tc">Orphan Post Report</h2>
         <div class="chart-card">
             <div class="head">
-                <h3>Orphan Posts</h3>
+                <h3>Orphan Posts (<?php echo $num_orphan; ?>)</h3>
             </div>
             <div class="body">
-
+                
+                <button id="hideBtn2" style="display:none;" class="button button-secondary">Hide</button>
                 <?php if ($num_orphan == 0): ?>
                     Excellent work! We found No Orphan Posts.
                 <?php else: ?>
-                    <p><strong>[<?php echo $num_orphan; ?> Orphan Post/s found]</strong></p>
                     <ul id="orphanList">
                         <?php foreach($orphan_links as $link): ?>
                             <li><a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></li>
@@ -333,9 +402,10 @@ function linkages_overall_report_callback(){
     </div><!-- ./wrap -->
 
     <div class="wrap" id="outbound-domains">
+        <h2 class="tc">External Domain report</h2>
         <div class="chart-card">
             <div class="head">
-                <h2>Outbound Domains</h2>
+                <h3>Outbound Domains</h3>
             </div>
             <div class="body">
                 <?php if ( $num_outbound_domains == 0 ) : ?>
@@ -361,6 +431,34 @@ function linkages_overall_report_callback(){
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        const link_report = document.getElementById('linkReport');
+
+        new Chart(link_report, {
+        type: 'bar',
+        data: {
+        labels: [
+                    'Correct Internal Links' + '(' + <?php echo $num_internal_link - $num_internal_404; ?> + ')',
+                    'Faulty Internal Links' + '(' + <?php echo $num_internal_404; ?> + ')',
+                    'Correct External Links' + '(' + <?php echo $num_outbound_link - $num_outbound_404; ?> + ')',
+                    'Faulty External Links' + '(' + <?php echo $num_outbound_404; ?> + ')',
+
+                ],
+        datasets: [
+                    {
+                        label: 'Number of links, out of ' + <?php echo $num_total_link; ?>,
+                        data: [
+                                <?php echo $num_internal_link - $num_internal_404; ?>,
+                                <?php echo $num_internal_404; ?>,
+                                <?php echo $num_outbound_link - $num_outbound_404; ?>,
+                                <?php echo $num_outbound_404; ?>
+                            ],
+                        borderWidth: 1
+                    }
+            ]
+        },
+        });
+        
+        
         const ctx = document.getElementById('myChart');
 
         new Chart(ctx, {
@@ -381,7 +479,7 @@ function linkages_overall_report_callback(){
         new Chart(outbound404, {
             type: 'pie',
             data: {
-            labels: ['Total Outbound Links', 'Number of 404 Outbound Links'],
+            labels: ['Total Outbound Links' + '(' + <?php echo $num_outbound_link; ?> + ')', 'Number of 404 Outbound Links' + '(' + <?php echo $num_outbound_404; ?> + ')'],
             datasets: [{
                 label: 'out of ' + <?php echo $num_outbound_link; ?> + ' Links',
                 data: [<?php echo $num_outbound_link; ?>, <?php echo $num_outbound_404; ?>],
@@ -397,7 +495,7 @@ function linkages_overall_report_callback(){
         new Chart(internal404, {
             type: 'pie',
             data: {
-            labels: ['Total Internal Links', 'Number of 404 Internal Links'],
+            labels: ['Total Internal Links' + '(' + <?php echo $num_internal_link; ?> + ')', 'Number of 404 Internal Links' + '(' + <?php echo $num_internal_404; ?> + ')'],
             datasets: [{
                 label: 'out of ' + <?php echo $num_internal_link; ?> + ' Links',
                 data: [<?php echo $num_internal_link; ?>, <?php echo $num_internal_404; ?>],
@@ -409,9 +507,9 @@ function linkages_overall_report_callback(){
         const orphanLinks = document.getElementById('orphanLinks');
 
         new Chart(orphanLinks, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
-            labels: ['Posts with Interlinks', 'Number of Orphan Posts'],
+            labels: ['Posts with Interlinks' + '(' + <?php echo $num_all_posts - $num_orphan; ?> + ')', 'Number of Orphan Posts' + '(' + <?php echo $num_orphan; ?> + ')'],
             datasets: [{
                 label: 'out of ' + <?php echo $num_all_posts; ?> + ' Links',
                 data: [<?php echo $num_all_posts - $num_orphan; ?>, <?php echo $num_orphan; ?>],
@@ -423,12 +521,9 @@ function linkages_overall_report_callback(){
     </script>
 
 
-
 <?php endif; ?>
 
 </div>
 
 <?php
 }
-
-

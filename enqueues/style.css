@@ -3,6 +3,7 @@
 }
 .linkages-container {
     margin: 0;
+    font-size: 14px;
 }
 
 .linkages-container .wrap {
@@ -39,6 +40,10 @@
     grid-column: 1 / span 1;
 }
 
+.chart-cards-big .rr {
+    grid-column: 2 / span 1;
+}
+
 .chart-cards .card {
     box-shadow: -7px 0px 11px -3px rgba(0,0,0,0.1);
     border-radius: var(--border-radius);
@@ -53,7 +58,7 @@
 }
 .chart-card .head {
     padding: 1rem;
-    border-bottom: 1px solid rgb(234, 237, 241);
+    border-bottom: 1px dashed rgb(234, 237, 241);
 }
 .chart-card .head h3{
     margin: 0;
@@ -152,22 +157,34 @@
 .linkages-table {
     border-collapse: collapse;
     width: 100%;
-    border: 1px solid #ddd;
     border-radius: var(--border-radius);
   }
   
   .linkages-table thead {
-    background-color: #f2f2f2;
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    text-transform: uppercase;
+    color: #a1a6ad;
   }
-  
+  .linkages-table tbody {
+    color: rgb(15, 2, 2);
+    font-weight: 500;
+  }
+
   .linkages-table th, .linkages-table td {
     text-align: left;
     padding: 8px;
-    border-bottom: 1px solid #ddd;
+  }
+  .linkages-table td a {
+    text-decoration: none;
+    color: rgb(37 104 95 / 80%);
   }
   
   .linkages-table tr:hover {
     background-color: #f5f5f5;
+  }
+  .linkages-table tr {
+    transition: all .2s ease-out;
   }
   
   .linkages-table th {
@@ -207,12 +224,22 @@ ul#orphanList {
     list-style-type: decimal;
 }
 
+ul#orphanList li {
+    padding: .75rem 0;
+    border-bottom: 1px solid #f4f4f4;
+}
+
+ul#orphanList li a {
+    text-decoration: none;
+    color: rgb(37 104 95 / 80%)en;
+}
+
 .small-card .body .left p.b {
     color: #A4BC92;
 }
 
-.tc {
-    font-style: normal;
+.center {
+    text-align: center;
 }
 
 .loader {

@@ -59,11 +59,12 @@ function linkages_overall_report_callback(){
 
     if ($status == 'success'):
         // 404 source requests
-        $resp = get_response('http://127.0.0.1:5000/wp/plugin/ie-404', $domain, $api_key);
+        $resp = get_response('http://127.0.0.1:5000/wp/plugin/other', $domain, $api_key);
         $data = json_decode($resp);
         $source_internal_404 = $data->internal_links;
         $source_external_404 = $data->external_links;
         $num_pillars = $data->num_pillars;
+        $silo = $data->silo;
     endif;
     
 ?>
@@ -169,7 +170,7 @@ function linkages_overall_report_callback(){
                     <div class="left">
                         <h3><?php echo count($outbound_domains) ?></h3>
                         <p class="a">Outbound domains</p>
-                        <p class="b">Mo' relevant domains... mo' money!</p>
+                        <p class="b">Mo' relevant domains... mo' page-view!</p>
                     </div>
                     <div class="right">
                         <span class="dashicons dashicons-admin-site-alt2"></span>
@@ -195,12 +196,11 @@ function linkages_overall_report_callback(){
      
     <div class="wrap" id="quick">
 
-        <h2 class="tc">Quick Glance</h2>
-
         <div class="chart-cards-big">
+
             <div class="chart-card lr">
                 <div class="head">
-                    <h3>Post Report</h3>
+                    <h3>Link Report</h3>
                 </div>
                 <div>
                     <div class="body">
@@ -208,6 +208,43 @@ function linkages_overall_report_callback(){
                     </div>
                 </div>
             </div>
+            
+            <div class="chart-card rr">
+                <div class="head">
+                    <h3>Pillar Information</h3>
+                </div>
+                <div>
+                    <div class="body">
+                        
+                        <?php if($silo == []): ?>
+                            <p>You've not created any pillar posts for this project.</p>
+                            <p>These are important to create a systemetic interlinking silo.</p>
+                        <?php else: ?>
+                            <table class="linkages-table">
+                                <thead>
+                                    <tr>
+                                        <td>Pillar Posts</td>
+                                        <td>Support Posts</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($silo as $s) : ?>
+                                        <tr>
+                                            <td>
+                                                <a href="<?php echo $s->url ?>" target="_blank"><?php echo $s->title ?></a>
+                                            </td>
+                                            <td>
+                                                <?php echo $s->supports ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="chart-cards">
@@ -262,64 +299,25 @@ function linkages_overall_report_callback(){
     </div><!-- ./wrap -->
 
     <div class="wrap" id="link">
-        <h2 class="tc">404 Links</h2>
-        <p class="tc">
-            We found <?php echo $num_internal_404 + $num_outbound_404; ?> links that returns 404 status code. <?php if ($num_internal_404 + $num_outbound_404 == 0) {echo 'Good Job!';} else {echo 'Fix it.';} ?>
-        </p>
         
-        <?php if ($num_internal_404 != 0) : ?>
-            
-            <div class="chart-card">
-                <div class="head">
-                    <h3>Internal 404 Links</h3>
-                </div>
-                <div class="body">
-                    <table class="linkages-table">
-                        <thead>
-                            <tr>
-                                <td>Post Url</td>
-                                <td>Source Post</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ( $source_internal_404 as $link ) : ?>
-                                <tr>
-                                <td><?php echo $link->post ?></td>
-                                <td>
-                                    <?php foreach ( $link->source as $source ) : ?>
-                                        <p>
-                                            <a href="<?php echo $source; ?>" target="_blank"><?php echo $source; ?></a>
-                                    </p>
-                                    <?php endforeach; ?>
-                                </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-        <?php endif; ?>
-        
-        <?php if ($num_outbound_404 != 0) : ?>
+        <div class="chart-cards">
 
-            <br>
-
-            <div class="chart-card">
-                <div class="head">
-                    <h3>External 404 Links</h3>
-                </div>
-                <div class="body">
-
-                    <table class="linkages-table">
+            <?php if ($num_internal_404 != 0) : ?>
+                
+                <div class="chart-card">
+                    <div class="head">
+                        <h3>Internal 404 Links</h3>
+                    </div>
+                    <div class="body">
+                        <table class="linkages-table">
                             <thead>
                                 <tr>
-                                    <td>Post Url</td>
+                                    <td>Link</td>
                                     <td>Source Post</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ( $source_external_404 as $link ) : ?>
+                                <?php foreach ( $source_internal_404 as $link ) : ?>
                                     <tr>
                                     <td><?php echo $link->post ?></td>
                                     <td>
@@ -333,66 +331,112 @@ function linkages_overall_report_callback(){
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
-
+                    </div>
                 </div>
-            </div>
+                
+            <?php endif; ?>
             
-        <?php endif; ?>
+            <?php if ($num_outbound_404 != 0) : ?>
+
+                <div class="chart-card">
+                    <div class="head">
+                        <h3>External 404 Links</h3>
+                    </div>
+                    <div class="body">
+    
+                        <table class="linkages-table">
+                                <thead>
+                                    <tr>
+                                        <td>Link</td>
+                                        <td>Source Post</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ( $source_external_404 as $link ) : ?>
+                                        <tr>
+                                        <td><?php echo $link->post ?></td>
+                                        <td>
+                                            <?php foreach ( $link->source as $source ) : ?>
+                                                <p>
+                                                    <a href="<?php echo $source; ?>" target="_blank"><?php echo $source; ?></a>
+                                            </p>
+                                            <?php endforeach; ?>
+                                        </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+    
+                    </div>
+                </div>
+                
+            <?php endif; ?>
+
+        </div>
+
 
     </div><!-- ./wrap -->
 
     <div class="wrap" id="orphan">
-        <h2 class="tc">Orphan Post Report</h2>
-        <div class="chart-card">
-            <div class="head">
-                <h3>Orphan Posts (<?php echo $num_orphan; ?>)</h3>
-            </div>
-            <div class="body">
-                
-                <button id="hideBtn2" style="display:none;" class="button button-secondary">Hide</button>
-                <?php if ($num_orphan == 0): ?>
-                    Excellent work! We found No Orphan Posts.
-                <?php else: ?>
-                    <ul id="orphanList">
-                        <?php foreach($orphan_links as $link): ?>
-                            <li><a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></li>
-                        <?php endforeach; ?>
-                    </ul>
-                    <?php if($num_orphan > 5): ?>
-                        <button id="expandBtn" class="button button-primary">See all <?php echo $num_orphan; ?></button>
-                        <button id="hideBtn" style="display:none;" class="button button-secondary">Hide</button>
-                    <?php endif; ?>
-                <?php endif; ?>
 
+        <div class="chart-cards">
+
+            <div class="chart-card">
+                <div class="head">
+                    <h3>Orphan Posts (<?php echo $num_orphan; ?>)</h3>
+                </div>
+                <div class="body">
+                    
+                    <button id="hideBtn2" style="display:none;" class="button button-secondary">Hide</button>
+                    <?php if ($num_orphan == 0): ?>
+                        Excellent work! We found No Orphan Posts.
+                    <?php else: ?>
+                        <ul id="orphanList">
+                            <?php foreach($orphan_links as $link): ?>
+                                <li><a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php if($num_orphan > 5): ?>
+                            <button id="expandBtn" class="button button-primary">See all <?php echo $num_orphan; ?></button>
+                            <button id="hideBtn" style="display:none;" class="button button-secondary">Hide</button>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                </div>
             </div>
-        </div>
+
+            <div class="chart-card">
+                <div class="head">
+                    <h3>Outbound Domains</h3>
+                </div>
+                <div class="body">
+                    <?php if ( $num_outbound_domains == 0 ) : ?>
+                        Number of Outbound Domains: 0
+                    <?php else: ?>
+                        <table class="linkages-table">
+                            <thead>
+                                <tr>
+                                    <td>Domain</td><td>Count</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach( $outbound_domains as $od ) : ?>
+                                    <tr><td><?php echo $od->domain; ?></td><td><?php echo $od->count; ?></td></tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+        </div><!-- ./chart-cards -->
+
     </div><!-- ./wrap -->
 
     <div class="wrap" id="outbound-domains">
-        <h2 class="tc">External Domain report</h2>
-        <div class="chart-card">
-            <div class="head">
-                <h3>Outbound Domains</h3>
-            </div>
-            <div class="body">
-                <?php if ( $num_outbound_domains == 0 ) : ?>
-                    Number of Outbound Domains: 0
-                <?php else: ?>
-                    <table class="linkages-table">
-                        <thead>
-                            <tr>
-                                <td>Domain</td><td>Count</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach( $outbound_domains as $od ) : ?>
-                                <tr><td><?php echo $od->domain; ?></td><td><?php echo $od->count; ?></td></tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php endif; ?>
-            </div>
-        </div>
+
+        
+
     </div><!-- ./wrap -->
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
