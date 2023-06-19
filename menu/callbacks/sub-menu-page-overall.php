@@ -5,14 +5,8 @@ function linkages_overall_report_callback(){
     // $domain = 'https://anikyusuf.com';
 
     $api_key = get_option('linkages_api_key');
-    $resp = get_response('http://127.0.0.1:5000/wp/plugin/get-report', $domain, $api_key);
-
-    // Add JavaScript code to hide the preloader when the page is fully loaded
-    // echo '<script>
-    //         window.addEventListener("load", function(){
-    //             document.getElementById("preloader").style.display = "none";
-    //         });
-    //     </script>';
+    // $resp = get_response('https://linkages.io/api/plugin/get-report', $domain, $api_key);
+    $resp = get_response('http://127.0.0.1:5000/api/plugin/get-report', $domain, $api_key);
 
     $data = json_decode($resp);
 
@@ -59,7 +53,7 @@ function linkages_overall_report_callback(){
 
     if ($status == 'success'):
         // 404 source requests
-        $resp = get_response('http://127.0.0.1:5000/wp/plugin/other', $domain, $api_key);
+        $resp = get_response('https://linkages.io/api/plugin/other', $domain, $api_key);
         $data = json_decode($resp);
         $source_internal_404 = $data->internal_links;
         $source_external_404 = $data->external_links;
@@ -92,17 +86,22 @@ function linkages_overall_report_callback(){
 
 <?php elseif ($status == 'success') : ?>
 
-    <div class="wrap">
-    
-        <div class="chart-card">
-            <div class="head">
-                <h2>Domain report on: <em><?php echo $domain; ?></em></h2>
+    <div class="wrap" id="intro">
+
+        <div class="chart-cards-mid">
+
+            <div class="chart-card">
+                <div class="head">
+                    <h3>Update Time</h3>
+                </div>
+                <div class="body">
+                    <h2>Last report update: <span style='color: #6192b3'><?php echo $time_ago; ?></span>.</h2>
+                    <p>Head over to <a href="https://linkages.io" target="_blank">linkages.com</a> to update site report.</p>
+                </div>
             </div>
-            <div class="body">
-                <h2>This report was created <span style='color: #6192b3'><?php echo $time_ago; ?></span>.</h2>
-                <p>Head over to <a href="https://linkages.io" target="_blank">linkages.com</a> to update site report.</p>
-            </div>
+
         </div>
+    
 
     </div><!-- ./wrap -->
 

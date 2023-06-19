@@ -2,8 +2,10 @@
 function linkages_404_report_callback(){
 
     $api_key = get_option('linkages_api_key');
+    $domain = get_site_url();
 
-    $resp = get_response('http://127.0.0.1:5000/wp/plugin/get-report', 'https://anikyusuf.com', $api_key);
+    // $resp = get_response('http://127.0.0.1:5000/wp/plugin/get-report', $domain, $api_key);
+    $resp = get_response('https://linkages.io/api/plugin/get-report', $domain, $api_key);
 
     $data = json_decode($resp);
 

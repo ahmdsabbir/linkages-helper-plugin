@@ -27,6 +27,12 @@
     gap: 2rem;
 }
 
+.chart-cards-mid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
 .chart-cards-big {
     display: grid;
     /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
